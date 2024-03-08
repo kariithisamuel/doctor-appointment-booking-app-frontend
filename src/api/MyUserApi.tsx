@@ -104,7 +104,7 @@ export const useUpdateMyUser = () => {
     };
 
     const { mutateAsync: updateUser,
-        isLoading
+        isLoading,
         isSuccess,
         error,
         reset,  
