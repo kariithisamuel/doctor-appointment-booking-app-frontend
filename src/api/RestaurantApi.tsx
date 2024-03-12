@@ -27,5 +27,3 @@ export const useGetRestaurant = (restaurantId?: string) => {
 
   return { restaurant, isLoading };
 };
-
-};
