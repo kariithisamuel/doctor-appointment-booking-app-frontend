@@ -16,14 +16,14 @@ const UsernameMenu = () => {
             <DropdownMenuContent>
            
                 <DropdownMenuItem>
-                <Link to="/manage-restaurant" className="font-bold hover:text-blue-500">
-                    Manage Restaurant
+                <Link to="/manage-appointment" className="font-bold hover:text-blue-500">
+                    Manage Appointment
                 </Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem>
                 <Link to="/user-profile" className="font-bold hover:text-blue-500">
-                    User Profile
+                    Your Profile
                 </Link>
                 </DropdownMenuItem>
                 <Separator />

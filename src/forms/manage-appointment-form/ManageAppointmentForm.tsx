@@ -4,18 +4,18 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import DetailsSection from "./DetailsSection";
 import { Separator } from "@/components/ui/separator";
-import CuisinesSection from "./CuisinesSection";
-import MenuSection from "./MenuSection";
+import SpecializationsSection from "./SpecializationsSection";
 import ImageSection from "./ImageSection";
 import LoadingButton from "@/components/LoadingButton";
 import { Button } from "@/components/ui/button";
-import { Restaurant } from "@/types";
+import { Appointment } from "@/types";
 import { useEffect } from "react";
+import SpecialitySection from "./SpecialitySection";
 
 const formSchema = z
   .object({
-    restaurantName: z.string({
-      required_error: "restuarant name is required",
+    appointmentName: z.string({
+      required_error: "appointment name is required",
     }),
     city: z.string({
       required_error: "city is required",
@@ -23,18 +23,18 @@ const formSchema = z
     country: z.string({
       required_error: "country is required",
     }),
-    deliveryPrice: z.coerce.number({
-      required_error: "delivery price is required",
+    appointmentTime: z.coerce.number({
+      required_error: "appointment time is required",
       invalid_type_error: "must be a valid number",
     }),
-    estimatedDeliveryTime: z.coerce.number({
-      required_error: "estimated delivery time is required",
+    appointmentfees: z.coerce.number({
+      required_error: "estimated appointment time is required",
       invalid_type_error: "must be a valid number",
     }),
-    cuisines: z.array(z.string()).nonempty({
+    specializations: z.array(z.string()).nonempty({
       message: "please select at least one item",
     }),
-    menuItems: z.array(
+    specialityItems: z.array(
       z.object({
         name: z.string().min(1, "name is required"),
         price: z.coerce.number().min(1, "price is required"),
@@ -48,70 +48,70 @@ const formSchema = z
     path: ["imageFile"],
   });
 
-type RestaurantFormData = z.infer<typeof formSchema>;
+type AppointmentFormData = z.infer<typeof formSchema>;
 
 type Props = {
-  restaurant?: Restaurant;
-  onSave: (restaurantFormData: FormData) => void;
+  appointment?: Appointment;
+  onSave: (appointmentFormData: FormData) => void;
   isLoading: boolean;
 };
 
-const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
-  const form = useForm<RestaurantFormData>({
+const ManageAppointmentForm = ({ onSave, isLoading, appointment }: Props) => {
+  const form = useForm<AppointmentFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      cuisines: [],
-      menuItems: [{ name: "", price: 0 }],
+      specializations: [],
+      specialityItems: [{ name: "", price: 0 }],
     },
   });
 
   useEffect(() => {
-    if (!restaurant) {
+    if (!appointment) {
       return;
     }
 
     // price lowest domination of 100 = 100pence == 1GBP
-    const deliveryPriceFormatted = parseInt(
-      (restaurant.deliveryPrice / 100).toFixed(2)
+    const appointmentFeeFormatted = parseInt(
+      (appointment.appointmentFee / 100).toFixed(2)
     );
 
-    const menuItemsFormatted = restaurant.menuItems.map((item) => ({
+    const specialityItemsFormatted = appointment.specialityItems.map((item) => ({
       ...item,
       price: parseInt((item.price / 100).toFixed(2)),
     }));
 
-    const updatedRestaurant = {
-      ...restaurant,
-      deliveryPrice: deliveryPriceFormatted,
-      menuItems: menuItemsFormatted,
+    const updatedAppointment = {
+      ...appointment,
+      appointmentFee: appointmentFeeFormatted,
+      specialityItems: specialityItemsFormatted,
     };
 
-    form.reset(updatedRestaurant);
-  }, [form, restaurant]);
+    form.reset(updatedAppointment);
+  }, [form, appointment]);
 
-  const onSubmit = (formDataJson: RestaurantFormData) => {
+  const onSubmit = (formDataJson: AppointmentFormData) => {
     const formData = new FormData();
 
-    formData.append("restaurantName", formDataJson.restaurantName);
+    formData.append("appointmentName", formDataJson.appointmentName);
     formData.append("city", formDataJson.city);
     formData.append("country", formDataJson.country);
 
     formData.append(
-      "deliveryPrice",
-      (formDataJson.deliveryPrice * 100).toString()
+      "appointmentFee",
+      (formDataJson.appointmentfees * 100).toString()
     );
     formData.append(
-      "estimatedDeliveryTime",
-      formDataJson.estimatedDeliveryTime.toString()
+      "appointmentTime",
+      formDataJson.appointmentTime.toString()
     );
-    formDataJson.cuisines.forEach((cuisine, index) => {
-      formData.append(`cuisines[${index}]`, cuisine);
+    formDataJson.specializations.forEach((specialization, index) => {
+      formData.append(`specializations[${index}]`, specialization);
     });
-    formDataJson.menuItems.forEach((menuItem, index) => {
-      formData.append(`menuItems[${index}][name]`, menuItem.name);
+    formDataJson.specialityItems.forEach((specialityItem, index) => {
+      formData.append(`specialityItems[${index}][name]`, specialityItem.name);
       formData.append(
-        `menuItems[${index}][price]`,
-        (menuItem.price * 100).toString()
+        `specialityItems[${index}][price]`,
+        (specialityItem.price * 100).toString()
       );
     });
 
@@ -130,9 +130,9 @@ const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
       >
         <DetailsSection />
         <Separator />
-        <CuisinesSection />
+        <SpecializationsSection/>
         <Separator />
-        <MenuSection />
+        <SpecialitySection/>
         <Separator />
         <ImageSection />
         {isLoading ? <LoadingButton /> : <Button type="submit">Submit</Button>}
@@ -141,4 +141,4 @@ const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
   );
 };
 
-export default ManageRestaurantForm;
+export default ManageAppointmentForm;

@@ -7,56 +7,56 @@ export type User = {
   country: string;
 };
 
-export type MenuItem = {
+export type SpecialityItem = {
   _id: string;
   name: string;
   price: number;
 };
 
-export type Restaurant = {
+export type Appointment = {
   _id: string;
   user: string;
-  restaurantName: string;
+  appointmentName: string;
   city: string;
   country: string;
-  deliveryPrice: number;
-  estimatedDeliveryTime: number;
-  cuisines: string[];
-  menuItems: MenuItem[];
+  appointmentFee: number;
+  appointmentTime: number;
+  specializations: string[];
+  specialityItems: SpecialityItem[];
   imageUrl: string;
   lastUpdated: string;
 };
 
-export type OrderStatus =
-  | "placed"
+export type BookingStatus =
+  | "requested"
   | "paid"
   | "inProgress"
-  | "outForDelivery"
-  | "delivered";
+  | "completed"
+  | "cancelled";
 
-export type Order = {
+export type Booking = {
   _id: string;
-  restaurant: Restaurant;
+  appointment: Appointment;
   user: User;
   cartItems: {
-    menuItemId: string;
+    specialityItemId: string;
     name: string;
     quantity: string;
   }[];
-  deliveryDetails: {
+ appointmentDetails: {
     name: string;
     addressLine1: string;
     city: string;
     email: string;
   };
   totalAmount: number;
-  status: OrderStatus;
+  status: BookingStatus;
   createdAt: string;
-  restaurantId: string;
+  appointmentId: string;
 };
 
-export type RestaurantSearchResponse = {
-  data: Restaurant[];
+export type AppointmentSearchResponse = {
+  data: Appointment[];
   pagination: {
     total: number;
     page: number;

@@ -1,43 +1,43 @@
 import { Button } from "@/components/ui/button";
 import { FormDescription, FormField, FormItem } from "@/components/ui/form";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import MenuItemInput from "./MenuItemInput";
+import SpecialityItemInput from "./SpecialityItemInput";
 
-const MenuSection = () => {
+const SpecialitySection = () => {
   const { control } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "menuItems",
+    name: "specialityItems",
   });
 
   return (
     <div className="space-y-2">
       <div>
-        <h2 className="text-2xl font-bold">Menu</h2>
+        <h2 className="text-2xl font-bold">Speciality</h2>
         <FormDescription>
-          Create your menu and give each item a name and a price
+          Create your specialities and give each a name and a price
         </FormDescription>
       </div>
       <FormField
         control={control}
-        name="menuItems"
+        name="specialityItems"
         render={() => (
           <FormItem className="flex flex-col gap-2">
             {fields.map((_, index) => (
-              <MenuItemInput
+              <SpecialityItemInput
                 index={index}
-                removeMenuItem={() => remove(index)}
+                removeSpecialityItem={() => remove(index)}
               />
             ))}
           </FormItem>
         )}
       />
       <Button type="button" onClick={() => append({ name: "", price: "" })}>
-        Add Menu Item
+        Add speciality
       </Button>
     </div>
   );
 };
 
-export default MenuSection;
+export default SpecialitySection;
